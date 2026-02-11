@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADEMANS— Music</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --text: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --accent: #ff3366;
+      --card: rgba(30, 30, 40, 0.6);
+      --border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 15, 15, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    nav a:hover, nav a.active {
+      color: white;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -6px;
+      left: 0;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 28px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    main {
+      padding-top: 120px;
+      padding-bottom: 6rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      text-align: center;
+      margin: 2rem 0 3rem;
+      background: linear-gradient(90deg, #fff, var(--accent), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .music-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .track-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .track-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    }
+
+    .track-art {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #444;
+      position: relative;
+    }
+
+    .track-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .track-info {
+      padding: 1.5rem;
+    }
+
+    .track-info h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .track-info .meta {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 0.5rem;
+      filter: brightness(0.9);
+    }
+
+    audio::-webkit-media-controls-panel {
+      background: rgba(30,30,40,0.8);
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      padding: 6rem 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .nav-container { padding: 1.2rem 1.5rem; }
+      
+      nav ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(15,15,15,0.95);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.5rem;
+      }
+
+      nav ul.active { display: flex; }
+
+      nav a { padding: 1.2rem 1rem; font-size: 1.2rem; }
+
+      .hamburger { display: flex; }
+
+      main { padding-top: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo"><a href="#" style="color:white; text-decoration:none;">ARTIST— Music</a></div>
+
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="music.html" class="active">Music</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#tour">Live</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1> ADEMANS Music</h1>
+
+    <div class="loading" id="loading">Loading tracks...</div>
+
+    <div class="music-grid" id="music-grid">
+      <!-- Tracks will be added here -->
+
+      <!-- Example static tracks (you can remove if using Firebase) -->
+      <div class="track-card">
+        <div class="track-art">Cover</div>
+        <div class="track-info">
+          <h3>Track Title 01</h3>
+          <div class="meta">Single • 2026</div>
+          <audio controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+
+      <div class="track-card">
+        <div class="track-art">Cover</div>
+        <div class="track-info">
+          <h3>Track Title 02</h3>
+          <div class="meta">Single • 2025</div>
+          <audio controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+
+      <div class="track-card">
+        <div class="track-art">Cover</div>
+        <div class="track-info">
+          <h3>Track Title 03</h3>
+          <div class="meta">Album • 2025</div>
+          <audio controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Artist Name — All rights reserved</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    });
+
+    document.querySelectorAll('#nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+      });
+    });
+
+    // Optional: Only one audio plays at a time
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(audio => {
+      audio.addEventListener('play', () => {
+        audios.forEach(other => {
+          if (other !== audio) {
+            other.pause();
+          }
+        });
+      });
+    });
+
+    // ── If you want to load tracks dynamically from Firebase ──
+    /*
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+    const firebaseConfig = { ...your config... };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const musicRef = ref(db, 'music'); // e.g. { track1: { title: "...", artist: "...", url: "..." }, ... }
+
+    onValue(musicRef, (snapshot) => {
+      const grid = document.getElementById('music-grid');
+      const loading = document.getElementById('loading');
+      grid.innerHTML = '';
+      loading.style.display = 'none';
+
+      if (!snapshot.exists()) {
+        grid.innerHTML = '<p style="text-align:center; color:var(--text-muted); grid-column: 1 / -1;">No tracks available yet.</p>';
+        return;
+      }
+
+      const tracks = snapshot.val();
+      Object.values(tracks).forEach(track => {
+        const card = document.createElement('div');
+        card.className = 'track-card';
+
+        card.innerHTML = `
+          <div class="track-art">${track.cover ? `<img src="${track.cover}" alt="${track.title}">` : 'Cover'}</div>
+          <div class="track-info">
+            <h3>${track.title || 'Untitled'}</h3>
+            <div class="meta">${track.meta || 'Single • 2026'}</div>
+            <audio controls>
+              <source src="${track.url}" type="audio/mpeg">
+            </audio>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // Re-attach play-one-at-a-time behavior
+      const newAudios = grid.querySelectorAll('audio');
+      newAudios.forEach(audio => {
+        audio.addEventListener('play', () => {
+          newAudios.forEach(other => {
+            if (other !== audio) other.pause();
+          });
+        });
+      });
+    });
+    */
+  </script>
+</body>
+</html>

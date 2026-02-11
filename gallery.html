@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADEMANS— Gallery</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Firebase SDK (modular v9+) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+    // ── REPLACE WITH YOUR FIREBASE CONFIG ──
+    const firebaseConfig = {
+      apiKey:            "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      authDomain:        "your-project-id.firebaseapp.com",
+      databaseURL:       "https://your-project-id-default-rtdb.firebaseio.com",
+      projectId:         "your-project-id",
+      storageBucket:     "your-project-id.appspot.com",
+      messagingSenderId: "123456789012",
+      appId:             "1:123456789012:web:abcdef1234567890abcdef"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    window.db = db;
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --text: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --accent: #ff3366;
+      --card: rgba(30, 30, 40, 0.6);
+      --border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 15, 15, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    nav a:hover, nav a.active {
+      color: white;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -6px;
+      left: 0;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 28px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    main {
+      padding-top: 120px;
+      padding-bottom: 6rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      text-align: center;
+      margin: 2rem 0 3rem;
+      background: linear-gradient(90deg, #fff, var(--accent), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      aspect-ratio: 4 / 5;
+      cursor: pointer;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.04);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      padding: 4rem 1rem;
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+    }
+
+    #lightbox.active {
+      display: flex;
+    }
+
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    #lightbox.active img {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    #lightbox-close:hover {
+      background: var(--accent);
+      transform: rotate(90deg);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .nav-container { padding: 1.2rem 1.5rem; }
+      
+      nav ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(15,15,15,0.95);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.5rem;
+      }
+
+      nav ul.active { display: flex; }
+
+      nav a { padding: 1.2rem 1rem; font-size: 1.2rem; }
+
+      .hamburger { display: flex; }
+
+      main { padding-top: 100px; }
+
+      #lightbox-close {
+        top: 1.5rem;
+        right: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo"><a href="index.html" style="color:white; text-decoration:none;">ARTIST</a></div>
+
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="music.html">Music</a></li>
+          <li><a href="gallery.html" class="active">Gallery</a></li>
+          <li><a href="index.html#tour">Live</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1>Gallery</h1>
+
+    <div class="loading" id="loading">Loading gallery...</div>
+
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox">
+    <button id="lightbox-close">×</button>
+    <img id="lightbox-img" src="" alt="Enlarged gallery image">
+  </div>
+
+  <footer>
+    <p>© 2026 Artist Name — All rights reserved</p>
+  </footer>
+
+  <script type="module">
+    import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+    const db = window.db;
+    const galleryRef = ref(db, 'gallery');
+    const grid = document.getElementById('gallery-grid');
+    const loading = document.getElementById('loading');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    // Close lightbox
+    lightboxClose.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        lightbox.classList.remove('active');
+      }
+    });
+
+    // Close when clicking outside image
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+      }
+    });
+
+    // Load gallery
+    onValue(galleryRef, (snapshot) => {
+      grid.innerHTML = '';
+      loading.style.display = 'none';
+
+      if (!snapshot.exists()) {
+        grid.innerHTML = '<p style="text-align:center; color:var(--text-muted); grid-column: 1 / -1;">No images found in gallery yet.</p>';
+        return;
+      }
+
+      const data = snapshot.val();
+      let images = [];
+
+      if (typeof data === 'object' && !Array.isArray(data)) {
+        images = Object.values(data).filter(url => typeof url === 'string' && url.startsWith('http'));
+      } else if (Array.isArray(data)) {
+        images = data
+          .map(item => (typeof item === 'string' ? item : item?.url))
+          .filter(url => url && typeof url === 'string' && url.startsWith('http'));
+      }
+
+      if (images.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; color:var(--text-muted); grid-column: 1 / -1;">No valid image URLs found.</p>';
+        return;
+      }
+
+      images.forEach(url => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = "Gallery image";
+        img.loading = "lazy";
+
+        // Open in lightbox
+        item.addEventListener('click', () => {
+          lightboxImg.src = url;
+          lightbox.classList.add('active');
+        });
+
+        item.appendChild(img);
+        grid.appendChild(item);
+      });
+    });
+
+    // Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    });
+
+    document.querySelectorAll('#nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>

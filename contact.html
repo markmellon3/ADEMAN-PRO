@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ARTIST — Contact</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --text: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --accent: #ff3366;
+      --card: rgba(30, 30, 40, 0.6);
+      --border: rgba(255, 255, 255, 0.08);
+      --success: #00ff9d;
+      --error: #ff3366;
+      --whatsapp: #25D366;
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 15, 15, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    nav a:hover, nav a.active {
+      color: white;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -6px;
+      left: 0;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 28px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    main {
+      padding-top: 120px;
+      padding-bottom: 8rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      text-align: center;
+      margin: 2rem 0 3rem;
+      background: linear-gradient(90deg, #fff, var(--accent), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .contact-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      gap: 4rem;
+    }
+
+    .form-section, .connect-section {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+
+    .form-section h2, .connect-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: white;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    input, textarea {
+      background: rgba(40, 40, 50, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      color: white;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.2);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255,51,102,0.4);
+    }
+
+    .status-message {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: 500;
+      min-height: 1.5rem;
+    }
+
+    .success { color: var(--success); }
+    .error   { color: var(--error); }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+
+    .social-link:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .social-link svg {
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+    }
+
+    /* Phone Card */
+    .phone-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .phone-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    .phone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .phone-item {
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      font-family: monospace;
+      transition: var(--transition);
+    }
+
+    .phone-item a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .phone-item a:hover {
+      color: var(--accent);
+    }
+
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--whatsapp);
+      color: white;
+      padding: 0.9rem 1.8rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .whatsapp-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+    }
+
+    .whatsapp-btn svg {
+      width: 26px;
+      height: 26px;
+      fill: white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .nav-container { padding: 1.2rem 1.5rem; }
+      nav ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(15,15,15,0.95);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.5rem;
+      }
+      nav ul.active { display: flex; }
+      nav a { padding: 1.2rem 1rem; font-size: 1.2rem; }
+      .hamburger { display: flex; }
+      main { padding-top: 100px; }
+      .contact-container { gap: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo"><a href="index.html" style="color:white; text-decoration:none;">ARTIST</a></div>
+
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="music.html">Music</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#tour">Live</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1>Contact</h1>
+
+    <div class="contact-container">
+      <!-- Form Section -->
+      <div class="form-section">
+        <h2>Send a Message</h2>
+        <form id="contact-form">
+          <input type="text" name="name" placeholder="Your Name" required autocomplete="name">
+          <input type="email" name="email" placeholder="Your Email" required autocomplete="email">
+          <textarea name="message" placeholder="Your Message..." required></textarea>
+          <button type="submit">Send Message</button>
+          <div id="form-status" class="status-message"></div>
+        </form>
+      </div>
+
+      <!-- Connect Section -->
+      <div class="connect-section">
+        <h2>Connect With Me</h2>
+
+        <!-- Phone Numbers Card -->
+        <div class="phone-card">
+          <h3>Phone / WhatsApp</h3>
+          <div class="phone-list">
+            <div class="phone-item">
+              <a href="tel:+256 703 502057">+256 700 123 456</a>
+            </div>
+            <div class="phone-item">
+              <a href="tel:+256 703 502057">+256 752 987 654</a>
+            </div>
+          </div>
+
+          <a href="https://wa.me/256703502057" target="_blank" class="whatsapp-btn">
+            <svg viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zM6.577 18.481c-.004-.01-.007-.023-.011-.036l-.036-.133-.018-.06.016-.058c.016-.06.036-.13.057-.212.021-.08.046-.17.076-.285.058-.225.122-.468.188-.725.065-.257.128-.526.19-.805.062-.279.122-.577.18-.891.058-.314.11-.645.158-.992.048-.347.09-.71.124-1.092.034-.382.053-.78.053-1.193 0-3.182-2.586-5.768-5.767-5.768-3.182 0-5.767 2.586-5.767 5.768 0 1.019.265 2.012.768 2.899l-.564 2.064 2.114-.556c.814.482 1.75.77 2.788.771 3.182 0 5.767-2.586 5.768-5.767.001-3.181-2.586-5.767-5.767-5.767z"/>
+            </svg>
+            Message on WhatsApp
+          </a>
+        </div>
+
+        <div class="social-links">
+          <a href="https://instagram.com/yourusername" target="_blank" class="social-link">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.227.227 2.695.072 7.053.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.155 4.358 2.623 6.826 6.981 6.981C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.358-.155 6.826-2.623 6.981-6.981.058-1.28.072-1.689.072-4.948 0-3.259-.014-3.668-.072-4.948-.155-4.358-2.623-6.826-6.981-6.981C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+            Instagram
+          </a>
+          <a href="https://twitter.com/yourusername" target="_blank" class="social-link">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X / Twitter
+          </a>
+          <a href="https://open.spotify.com/artist/yourid" target="_blank" class="social-link">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.636 14.364a.75.75 0 01-1.06 0 5.5 5.5 0 00-7.778 0 .75.75 0 11-1.06-1.06 7 7 0 019.898 0 .75.75 0 010 1.06zm-2.828-3.536a.75.75 0 11-1.06 0 3.5 3.5 0 00-4.95 0 .75.75 0 11-1.06-1.06 5 5 0 017.07 0 .75.75 0 010 1.06z"/></svg>
+            Spotify
+          </a>
+          <a href="mailto:hello@yourartist.com" class="social-link">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Artist Name — All rights reserved</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    });
+
+    document.querySelectorAll('#nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+      });
+    });
+
+    // Contact form (client-side demo)
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const name = formData.get('name').trim();
+      const email = formData.get('email').trim();
+      const message = formData.get('message').trim();
+
+      if (!name || !email || !message) {
+        status.textContent = "Please fill in all fields.";
+        status.className = 'status-message error';
+        return;
+      }
+
+      status.textContent = "Message sent! I'll get back to you soon.";
+      status.className = 'status-message success';
+
+      form.reset();
+
+      setTimeout(() => {
+        status.textContent = '';
+        status.className = 'status-message';
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
