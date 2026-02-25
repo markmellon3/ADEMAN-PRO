@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADEMAN — PRO Official WEBSITE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --text: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --accent: #ff3366;
+      --card: rgba(30, 30, 40, 0.6);
+      --border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header / Nav */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(15, 15, 15, 0.7);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: white;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -6px;
+      left: 0;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: white;
+    }
+
+    nav a:hover::after,
+    nav a.active::after {
+      width: 100%;
+    }
+
+    /* Mobile menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 28px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* Hero */
+    #hero {
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 1.5rem;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+                  url('https://ik.imagekit.io/s95tumxuk/WhatsApp%20Image%202026-02-18%20at%2011.15.08.jpeg') center/cover no-repeat;
+      position: relative;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 70%, rgba(255,51,102,0.15), transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 7.5rem);
+      line-height: 0.9;
+      margin-bottom: 1.5rem;
+      letter-spacing: -3px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 4vw, 1.8rem);
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition);
+      box-shadow: 0 10px 30px rgba(255,51,102,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(255,51,102,0.4);
+    }
+
+    /* Sections */
+    section {
+      padding: 10rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      text-align: center;
+      margin-bottom: 4rem;
+      background: linear-gradient(90deg, #fff, var(--accent), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* About */
+    #about p {
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Music */
+    .music-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .track-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .track-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    }
+
+    .track-art {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #444;
+    }
+
+    .track-info {
+      padding: 1.5rem;
+    }
+
+    .track-info h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .track-info p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 1rem;
+      filter: brightness(0.9);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 1.2rem 1.5rem;
+      }
+
+      nav ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(15,15,15,0.95);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 0;
+      }
+
+      nav ul.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 1.2rem 1rem;
+        font-size: 1.2rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav a::after { display: none; }
+
+      .hamburger {
+        display: flex;
+      }
+
+      section {
+        padding: 6rem 1.5rem;
+      }
+
+      h2 {
+        margin-bottom: 3rem;
+      }
+    }
+    .track-art {
+  width: 100%;
+  height: 400px;          /* or whatever height you prefer */
+  overflow: hidden;
+  border-radius: 8px;     /* optional rounded corners */
+}
+
+.track-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* ensures the image fills nicely without distortion */
+}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo"> ARTIST</div>
+
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="music.html">Music</a></li>
+          <li><a href="#tour">Live</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <section id="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">ADEMAN PRO</h1>
+      <p class="hero-subtitle">New music. New energy. Coming 2026.</p>
+      <a href="#music" class="btn-primary">Listen Now</a>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>Blending raw emotion with futuristic soundscapes. Creating music that feels like tomorrow — today.</p>
+    <p>From underground shows to global stages, every note is a rebellion against ordinary.</p>
+  </section>
+
+ <section id="music">
+    <h2>Music</h2>
+    <div class="music-grid">
+      <div class="track-card">
+        <div class="track-art">
+          <img src="https://ik.imagekit.io/s95tumxuk/WhatsApp%20Image%202026-02-18%20at%2011.15.08.jpeg" alt="EKISANYI cover art">
+        </div>
+        <div class="track-info">
+          <h3>EKISANYI</h3>
+          <p>Single • 2026</p>
+          <audio controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+
+      <div class="track-card">
+        <div class="track-art">
+          <img src="https://thumbs.dreamstime.com/b/neon-music-notes-illuminated-against-black-background-neon-music-notes-illuminated-against-black-background-ai-generated-349999608.jpg" alt="Track Title 02 cover art">
+        </div>
+        <div class="track-info">
+          <h3>Track Title 02</h3>
+          <p>Single • 2025</p>
+          <audio controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+
+      <div class="track-card">
+        <div class="track-art">
+          <img src="https://thumbs.dreamstime.com/b/geometric-music-notes-shattered-vector-art-design-generative-ai-dynamic-polygonal-effect-symbolizing-abstract-sound-416445146.jpg" alt="Track Title 03 cover art">
+        </div>
+        <div class="track-info">
+          <h3>Track Title 03</h3>
+          <p>Album Cut • 2025</p>
+          <audio controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tour">
+    <h2>Live</h2>
+    <!-- You can add tour dates here in a similar card style -->
+    <p style="text-align:center; color:var(--text-muted); font-size:1.3rem;">
+      2026 World Tour — dates coming soon
+    </p>
+  </section>
+
+  <footer>
+    <p>© 2026 Artist Name — All rights reserved</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+      });
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
